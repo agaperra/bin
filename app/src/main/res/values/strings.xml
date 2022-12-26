@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">BIN</string>
+    <string name="enter_bin">Enter your card BIN here</string>
+    <string name="bin">BIN</string>
+    <string name="submit">Submit</string>
+    <string name="toast_enter">Please, enter your card BIN</string>
+    <string name="history_title">Response history</string>
+    <string name="nullable">\?</string>
+    <string name="type">Type</string>
+    <string name="bank">Bank</string>
+    <string name="scheme">Scheme</string>
+    <string name="country">Country</string>
+    <string name="coordinates">coordinates</string>
+    <string name="brand">Brand</string>
+    <string name="prepaid">Prepaid</string>
+    <string name="number">Number</string>
+    <string name="length">length</string>
+    <string name="lunh">lunh</string>
 </resources>

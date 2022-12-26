@@ -5,16 +5,366 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".presentation.ui.main.MainFragment">
 
     <TextView
-        android:id="@+id/message"
+        android:id="@+id/historyTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20dp"
+        app:layout_constraintEnd_toEndOf="@+id/historyRecycler"
+        app:layout_constraintStart_toStartOf="@+id/historyRecycler"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/historyRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_20dp"
+        android:clickable="true"
+        android:clipToPadding="false"
+        android:focusable="true"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/historyTitle"
+        tools:listitem="@layout/bin_item" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginBottom="@dimen/_20dp"
+        android:background="@color/main_yellow"
+        app:layout_constraintBottom_toTopOf="@id/enterTextTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/enterTextTV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_20dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/enterBinET"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/enterBinET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20dp"
+        android:hint="@string/bin"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/enterBinButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/enterBinButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20dp"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+        app:layout_constraintEnd_toEndOf="@+id/enterBinET"
+        app:layout_constraintStart_toStartOf="@+id/enterBinET" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MainFragment"
+        android:layout_margin="@dimen/_20dp"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:indicatorColor="@color/main_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_20dp"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/_5dp"
+        app:cardElevation="@dimen/_5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/typeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type"
+                app:layout_constraintBottom_toBottomOf="@+id/countryTv"
+                app:layout_constraintEnd_toStartOf="@+id/country"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/countryTv" />
+
+            <TextView
+                android:id="@+id/type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5dp"
+                android:ellipsize="end"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/typeTv"
+                app:layout_constraintStart_toStartOf="@+id/typeTv"
+                app:layout_constraintTop_toBottomOf="@+id/countryTv" />
+
+            <TextView
+                android:id="@+id/bankURL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5dp"
+                android:ellipsize="end"
+                android:autoLink="web"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/bankTv"
+                app:layout_constraintStart_toStartOf="@+id/bankTv"
+                app:layout_constraintTop_toBottomOf="@+id/bankName" />
+
+            <TextView
+                android:id="@+id/bankPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5dp"
+                android:ellipsize="end"
+                android:autoLink="phone"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/bankTv"
+                app:layout_constraintStart_toStartOf="@+id/bankTv"
+                app:layout_constraintTop_toBottomOf="@+id/bankURL" />
+
+            <TextView
+                android:id="@+id/bankCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5dp"
+                android:ellipsize="end"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/bankTv"
+                app:layout_constraintStart_toStartOf="@+id/bankTv"
+                app:layout_constraintTop_toBottomOf="@+id/bankPhone" />
+
+            <TextView
+                android:id="@+id/bankTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10dp"
+                android:text="@string/bank"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/bankName"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5dp"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/bankTv"
+                app:layout_constraintStart_toStartOf="@+id/bankTv"
+                app:layout_constraintTop_toBottomOf="@+id/bankTv" />
+
+            <TextView
+                android:id="@+id/schemeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5dp"
+                android:text="@string/scheme"
+                app:layout_constraintBottom_toBottomOf="@+id/countryTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/country"
+                app:layout_constraintTop_toTopOf="@+id/countryTv" />
+
+            <TextView
+                android:id="@+id/scheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/type"
+                app:layout_constraintEnd_toEndOf="@+id/schemeTv"
+                app:layout_constraintStart_toStartOf="@+id/schemeTv"
+                app:layout_constraintTop_toBottomOf="@+id/typeTv" />
+
+
+            <TextView
+                android:id="@+id/countryTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10dp"
+                android:layout_marginTop="1dp"
+                android:text="@string/country"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bankCity" />
+
+            <TextView
+                android:id="@+id/country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5dp"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/countryTv"
+                app:layout_constraintStart_toStartOf="@+id/countryTv"
+                app:layout_constraintTop_toBottomOf="@+id/countryTv" />
+
+            <TextView
+                android:id="@+id/coordinatesTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5dp"
+                android:text="@string/coordinates"
+                app:layout_constraintEnd_toEndOf="@+id/countryTv"
+                app:layout_constraintStart_toStartOf="@+id/countryTv"
+                app:layout_constraintTop_toBottomOf="@+id/country" />
+
+            <TextView
+                android:id="@+id/coordinates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_5dp"
+                android:text="@string/nullable"
+                android:textColor="@color/main_green"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/coordinatesTV"
+                app:layout_constraintStart_toStartOf="@+id/coordinatesTV"
+                app:layout_constraintTop_toBottomOf="@+id/coordinatesTV" />
+
+            <TextView
+                android:id="@+id/brandTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:text="@string/brand"
+                app:layout_constraintEnd_toEndOf="@+id/typeTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coordinates" />
+
+            <TextView
+                android:id="@+id/brand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:ellipsize="end"
+                android:maxWidth="100dp"
+                android:minLines="5"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/brandTv"
+                app:layout_constraintTop_toBottomOf="@id/brandTv" />
+
+            <TextView
+                android:id="@+id/prepaidTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5dp"
+                android:text="@string/prepaid"
+                app:layout_constraintBottom_toBottomOf="@+id/brandTv"
+                app:layout_constraintEnd_toStartOf="@+id/numTV"
+                app:layout_constraintStart_toEndOf="@+id/brand"
+                app:layout_constraintTop_toTopOf="@+id/brandTv" />
+
+            <TextView
+                android:id="@+id/prepaid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5dp"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/numTV"
+                app:layout_constraintStart_toEndOf="@+id/brand"
+                app:layout_constraintTop_toBottomOf="@+id/prepaidTv" />
+
+
+            <TextView
+                android:id="@+id/numTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/number"
+                app:layout_constraintBottom_toBottomOf="@+id/prepaidTv"
+                app:layout_constraintEnd_toEndOf="@+id/schemeTv"
+                app:layout_constraintStart_toStartOf="@+id/schemeTv"
+                app:layout_constraintTop_toTopOf="@+id/prepaidTv" />
+
+            <TextView
+                android:id="@+id/lenTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/length"
+                app:layout_constraintEnd_toStartOf="@+id/numTV"
+                app:layout_constraintStart_toStartOf="@+id/numTV"
+                app:layout_constraintTop_toTopOf="@+id/prepaid" />
+
+            <TextView
+                android:id="@+id/lunhTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lunh"
+                app:layout_constraintEnd_toEndOf="@+id/numTV"
+                app:layout_constraintStart_toEndOf="@+id/numTV"
+                app:layout_constraintTop_toTopOf="@+id/prepaid" />
+
+            <TextView
+                android:id="@+id/len"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_10dp"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/lenTV"
+                app:layout_constraintStart_toStartOf="@+id/lenTV"
+                app:layout_constraintTop_toBottomOf="@+id/lenTV" />
+
+            <TextView
+                android:id="@+id/lunh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_10dp"
+                android:text="@string/nullable"
+                android:textColor="@color/main_yellow"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/lunhTv"
+                app:layout_constraintStart_toStartOf="@+id/lunhTv"
+                app:layout_constraintTop_toBottomOf="@+id/lunhTv" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
