@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BIN</string>
+    <string name="enter_bin">Enter your card BIN here</string>
+    <string name="bin">BIN</string>
+    <string name="submit">Submit</string>
+    <string name="toast_enter">Please, enter your card BIN</string>
 </resources>
