@@ -1,8 +1,9 @@
 package com.agaperra.bin.data.remote.dto
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
-
+@Keep
 data class Country (
 
     @SerializedName("numeric"   ) var numeric   : String? = null,

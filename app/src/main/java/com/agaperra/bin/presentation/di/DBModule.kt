@@ -2,8 +2,8 @@ package com.agaperra.bin.presentation.di
 
 import android.content.Context
 import androidx.room.Room
-import com.agaperra.bin.data.db.BinDatabase
-import com.agaperra.bin.data.db.dao.BinItemDao
+import com.agaperra.bin.data.db.CardsDatabase
+import com.agaperra.bin.data.db.dao.CardsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,14 +18,14 @@ object DBModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context): BinDatabase = Room
-        .databaseBuilder(context, BinDatabase::class.java, "bin_database")
+    fun provideDatabase(@ApplicationContext context: Context): CardsDatabase = Room
+        .databaseBuilder(context, CardsDatabase::class.java, "bin_database")
         .fallbackToDestructiveMigration()
         .build()
 
     @Singleton
     @Provides
-    fun provideBinDao(binDatabase: BinDatabase): BinItemDao = binDatabase.itemDao()
+    fun provideCardsDao(cardsDatabase: CardsDatabase): CardsDao = cardsDatabase.cardsDao()
 
 
 }

@@ -3,7 +3,7 @@ package com.agaperra.bin.presentation.di
 import android.content.Context
 import com.agaperra.bin.data.api.BinApi
 import com.agaperra.bin.utils.Constants.API
-import com.agaperra.bin.utils.network.NetworkStatusListener
+import com.agaperra.bin.utils.network.InternetReceiver
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -41,10 +41,8 @@ object NetworkModule {
         .create(BinApi::class.java)
 
 
-    @ExperimentalCoroutinesApi
     @Singleton
     @Provides
-    fun provideNetworkStatusListener(@ApplicationContext context: Context): NetworkStatusListener =
-        NetworkStatusListener(context)
-
+    fun provideInternetReceiver(): InternetReceiver =
+        InternetReceiver()
 }

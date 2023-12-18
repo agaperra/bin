@@ -13,18 +13,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.agaperra.bin.R
-import com.agaperra.bin.data.remote.dto.BinResponse
+import com.agaperra.bin.data.remote.dto.CarsAnswerResponse
 import com.agaperra.bin.databinding.FragmentMainBinding
 import com.agaperra.bin.domain.AppState
-import com.agaperra.bin.domain.model.BinItem
+import com.agaperra.bin.domain.ErrorState
+import com.agaperra.bin.domain.model.CardItem
 import com.agaperra.bin.presentation.adapter.BinListAdapter
-import com.agaperra.bin.presentation.adapter.listener.BinNumberClickListener
 import com.agaperra.bin.utils.hideKeyboard
 import com.agaperra.bin.utils.launchingWhenStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -37,11 +38,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding get() = _binding!!
 
     private val binAdapter by lazy {
-        BinListAdapter(object : BinNumberClickListener {
-            override fun onItemClick(item: BinItem) {
-                binding.enterBinET.setText(item.number)
-            }
-        })
+        BinListAdapter { item ->
+            binding.enterBinET.setText(item.number)
+        }
     }
 
 
@@ -76,47 +75,85 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 ).show()
             } else {
                 this.hideKeyboard()
-                mainViewModel.getContent(binding.enterBinET.text.toString())
-                startObserve(mainViewModel.mainContent)
+                mainViewModel.getContent(
+                    requireContext(),
+                    binding.enterBinET.text.toString(),
+                    noInternet = {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.internet),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    },
+                    onError = {
+                        val error = when (it) {
+                            ErrorState.BAD_REQUEST -> {
+                                getString(R.string.bad_request)
+                            }
+
+                            ErrorState.NO_BIN_LOADED -> {
+                                getString(R.string.no_data)
+                            }
+
+                            ErrorState.NO_INTERNET_CONNECTION -> {
+                                getString(R.string.internet)
+                            }
+
+                            ErrorState.TOO_MANY_REQUESTS -> {
+                                getString(R.string.too_many)
+                            }
+                        }
+                        Toast.makeText(
+                            requireContext(),
+                            error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    },
+                    onSuccess = {
+                        startObserve(mainViewModel.mainContent)
+                    })
+
             }
-            mainViewModel.insertBin(binding.enterBinET.text.toString())
         }
         binding.enterBinET.setOnClickListener {
             binding.materialCardView.visibility = View.GONE
         }
     }
 
-    private fun startObserve(contentSource: StateFlow<AppState<BinResponse>>) {
+    private fun startObserve(contentSource: StateFlow<AppState<CarsAnswerResponse>>) {
         contentSource.onEach { result ->
             setResult(result)
         }.launchingWhenStarted(lifecycleScope)
     }
 
-    private fun startObserveHistory(contentSource: StateFlow<List<BinItem>>) {
+    private fun startObserveHistory(contentSource: StateFlow<List<CardItem>>) {
         contentSource.onEach { result ->
             setResultHistory(result)
         }.launchingWhenStarted(lifecycleScope)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setResult(result: AppState<BinResponse>) {
+    private fun setResult(result: AppState<CarsAnswerResponse>) {
         when (result) {
             is AppState.Error -> {
                 binding.progressBar.isVisible = false
                 binding.materialCardView.visibility = View.GONE
             }
+
             is AppState.Loading -> {
                 binding.progressBar.isVisible = true
                 binding.materialCardView.visibility = View.GONE
             }
+
             is AppState.Success -> {
+                mainViewModel.insertBin(binding.enterBinET.text.toString())
                 binding.progressBar.isVisible = false
                 binding.materialCardView.visibility = View.VISIBLE
 
-                binding.bankCity.text = mainViewModel.mainContent.value.data?.bank?.city ?: " ? "
-                binding.bankName.text = mainViewModel.mainContent.value.data?.bank?.name ?: " ? "
-                binding.bankPhone.text = mainViewModel.mainContent.value.data?.bank?.phone ?: " ? "
-                binding.bankURL.text = mainViewModel.mainContent.value.data?.bank?.url ?: " ? "
+                binding.bankCity.text = mainViewModel.mainContent.value.data?.bank?.city ?: getString(R.string.empty)
+                binding.bankName.text = mainViewModel.mainContent.value.data?.bank?.name ?: getString(R.string.empty)
+                binding.bankPhone.text = mainViewModel.mainContent.value.data?.bank?.phone ?: getString(R.string.empty)
+                binding.bankURL.text = mainViewModel.mainContent.value.data?.bank?.url ?: getString(R.string.empty)
 
                 if (mainViewModel.mainContent.value.data?.country?.latitude != null && mainViewModel.mainContent.value.data?.country?.longitude != null) {
                     binding.coordinates.text =
@@ -132,32 +169,38 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                         requireContext().startActivity(intent)
                     }
-                } else binding.coordinates.text = " ? "
+                } else binding.coordinates.text = getString(R.string.empty)
 
 
-                binding.country.text = mainViewModel.mainContent.value.data?.country?.name ?: " ? "
+                binding.country.text =
+                    mainViewModel.mainContent.value.data?.country?.name ?: getString(R.string.empty)
 
                 binding.prepaid.text =
-                    (mainViewModel.mainContent.value.data?.prepaid ?: " ? ").toString()
+                    (mainViewModel.mainContent.value.data?.prepaid
+                        ?: getString(R.string.empty)).toString()
 
                 binding.type.text = (
-                        mainViewModel.mainContent.value.data?.type ?: " ? "
+                        mainViewModel.mainContent.value.data?.type ?: getString(R.string.empty)
                         ).toString()
 
-                binding.scheme.text = mainViewModel.mainContent.value.data?.scheme ?: "?"
+                binding.scheme.text =
+                    mainViewModel.mainContent.value.data?.scheme ?: getString(R.string.empty)
 
-                binding.brand.text = mainViewModel.mainContent.value.data?.brand ?: " ? "
+                binding.brand.text =
+                    mainViewModel.mainContent.value.data?.brand ?: getString(R.string.empty)
 
                 binding.len.text =
-                    (mainViewModel.mainContent.value.data?.number?.length ?: " ? ").toString()
+                    (mainViewModel.mainContent.value.data?.number?.length
+                        ?: getString(R.string.empty)).toString()
                 binding.lunh.text =
-                    (mainViewModel.mainContent.value.data?.number?.luhn ?: " ? ").toString()
+                    (mainViewModel.mainContent.value.data?.number?.luhn
+                        ?: getString(R.string.empty)).toString()
             }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun setResultHistory(result: List<BinItem>) {
+    private fun setResultHistory(result: List<CardItem>) {
         binAdapter.submitList(result)
         binAdapter.notifyDataSetChanged()
     }

@@ -1,9 +1,10 @@
 package com.agaperra.bin.data.remote.dto
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
-
-data class BinResponse(
+@Keep
+data class CarsAnswerResponse(
 
     @SerializedName("number"  ) var number  : Number?  = Number(),
     @SerializedName("scheme"  ) var scheme  : String?  = null,
