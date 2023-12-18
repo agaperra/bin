@@ -1,9 +1,10 @@
 package com.agaperra.bin.data.remote.dto
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 
-
+@Keep
 data class Bank (
 
     @SerializedName("name"  ) var name  : String? = null,

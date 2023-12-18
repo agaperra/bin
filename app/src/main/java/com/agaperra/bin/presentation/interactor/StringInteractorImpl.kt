@@ -9,6 +9,6 @@ import javax.inject.Inject
 class StringInteractorImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : StringInteractor {
-    override val enterBin: String = context.getString(R.string.enter_bin)
+    override val enterBinNumber: String = context.getString(R.string.enter_bin)
     override val historyTitle: String = context.getString(R.string.history_title)
 }

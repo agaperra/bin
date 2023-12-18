@@ -1,5 +1,5 @@
 package com.agaperra.bin.domain.model
 
-data class BinItem (
+data class CardItem (
     val number: String?
 )

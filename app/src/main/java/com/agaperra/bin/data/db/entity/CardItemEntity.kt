@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "items_table")
-data class BinItemEntity(
+data class CardItemEntity(
     @PrimaryKey
     @ColumnInfo(name = "number")
     val number: String

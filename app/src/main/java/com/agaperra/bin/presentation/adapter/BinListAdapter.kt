@@ -7,12 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.agaperra.bin.R
 import com.agaperra.bin.databinding.BinItemBinding
-import com.agaperra.bin.domain.model.BinItem
+import com.agaperra.bin.domain.model.CardItem
 import com.agaperra.bin.presentation.adapter.diffutil.BinDiffUtil
-import com.agaperra.bin.presentation.adapter.listener.BinNumberClickListener
 
-class BinListAdapter(val onBinClickListener: BinNumberClickListener) :
-    ListAdapter<BinItem, BinListAdapter.BinListViewHolder>(BinDiffUtil()) {
+class BinListAdapter(val onBinClickListener: (CardItem)->Unit) :
+    ListAdapter<CardItem, BinListAdapter.BinListViewHolder>(BinDiffUtil()) {
 
     inner class BinListViewHolder(private val binding: BinItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -25,7 +24,7 @@ class BinListAdapter(val onBinClickListener: BinNumberClickListener) :
             binding.binN.text = bin.number
 
             binding.root.setOnClickListener {
-                onBinClickListener.onItemClick(item =  bin)
+                onBinClickListener(bin)
             }
         }
     }

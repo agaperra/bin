@@ -16,4 +16,10 @@
     <string name="number">Number</string>
     <string name="length">length</string>
     <string name="lunh">lunh</string>
+    <string name="internet">There is no internet connection</string>
+    <string name="error">error</string>
+    <string name="bad_request">Incorrect card number</string>
+    <string name="no_data">No data was received</string>
+    <string name="too_many">Too many requests</string>
+    <string name="empty">-</string>
 </resources>
